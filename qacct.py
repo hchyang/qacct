@@ -18,11 +18,11 @@ def main():
         description='Retrieve the records of killed jobs on big cluster')
     parser.add_argument('-q','--query',type=str,required=True,
         help='the string you want to query')
-    parser.add_argument('-a','--all',action='store_true',
-        help='print all the matching records, not just the last one')
     default=3
     parser.add_argument('-d','--days',type=int,default=default,
         help='find all the matching records in last INT days [{}]'.format(default))
+    parser.add_argument('-l','--last',action='store_true',
+        help='print the last matching record, not all of them')
     args=parser.parse_args()
 
     logpath='/pnas/spool/hsd_logs'
@@ -44,10 +44,10 @@ def main():
                 if line.startswith('---------------<') and found:
                     for i in block[::-1]:
                         print(i)
-                    if not args.all:
+                    if args.last:
                         break
         if found:
-            if not args.all:
+            if args.last:
                 break
 
 if __name__=='__main__':
