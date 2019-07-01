@@ -16,8 +16,11 @@ import subprocess
 def main():
     parser=argparse.ArgumentParser(
         description='Retrieve the records of killed jobs on big cluster')
-    parser.add_argument('-q','--query',type=str,required=True,
-        help='the string you want to query')
+    p = subprocess.Popen("whoami", stdout=subprocess.PIPE, shell=True)
+    (output, err) = p.communicate()
+    default=output.decode().rstrip()
+    parser.add_argument('-q','--query',type=str,default=default,
+        help='the string you want to query [{}]'.format(default))
     default=3
     parser.add_argument('-d','--days',type=int,default=default,
         help='find all the matching records in last INT days [{}]'.format(default))
